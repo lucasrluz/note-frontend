@@ -1,4 +1,8 @@
-export function CreateDemoAccountButton({ createDemoAccount }: any) {
+"use client";
+
+import { createDemoAccount } from "./util/createDemoAccount";
+
+export function CreateDemoAccountButton() {
   return (
     <button
       className="mb-5 mt-3 h-11 w-5/6 rounded-md bg-sky-600 text-white hover:bg-sky-700"
