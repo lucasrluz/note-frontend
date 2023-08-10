@@ -58,7 +58,7 @@ export default function LoginPage() {
 
   return (
     <main className="flex h-screen flex-col items-center justify-center">
-      <div className="flex w-1/3 flex-col items-center rounded-lg bg-white shadow-2xl">
+      <div className="flex w-96 flex-col items-center rounded-lg bg-white shadow-2xl">
         <LoginTitle />
         <EmailInput />
         <PasswordInput />
