@@ -1,34 +1,53 @@
 "use client";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import Link from "next/link";
-import Input from "postcss/lib/input";
 
 export default function LoginPage() {
   const router = useRouter();
 
-  function createDemoAccount() {
-    // axios.post("https://note-api-w041.onrender.com/demo")
-    // .then((response) => {
-    // localStorage.setItem("foo", "bar")
-    // router.push('/user/demo')
-    // })
-    // .catch((error) => {
-    //     alert(error)
-    // })
-    alert(
-      "Esta é uma Conta Demo, portando ela será excluída em 24h. Não armazene nenhum valor que você queira guardar por uma longo tempo. Caso este seja o seu objeto considere criar uma conta.",
-    );
+  async function createDemoAccount() {
+    try {
+      const response = await axios.post(
+        "https://note-api-w041.onrender.com/user/demo",
+        {},
+      );
 
-    const emailInput: HTMLInputElement = document.querySelector("#email")!;
-    const passwordInput: HTMLInputElement =
-      document.querySelector("#password")!;
+      alert(
+        "Esta é uma Conta Demo, portando ela será excluída em 24h. Não armazene nenhum valor que você queira guardar por uma longo tempo. Caso este seja o seu objeto considere criar uma conta.",
+      );
 
-    emailInput.value = "foo";
-    passwordInput.value = "123";
+      const emailInput: HTMLInputElement = document.querySelector("#email")!;
+      const passwordInput: HTMLInputElement =
+        document.querySelector("#password")!;
+
+      emailInput.value = response.data.email;
+      passwordInput.value = response.data.password;
+    } catch (error) {
+      alert(error);
+    }
   }
 
-  function logar() {}
+  async function login() {
+    try {
+      const emailInput: HTMLInputElement = document.querySelector("#email")!;
+      const passwordInput: HTMLInputElement =
+        document.querySelector("#password")!;
+
+      const response = await axios.post(
+        "https://note-api-w041.onrender.com/auth/login",
+        {
+          email: emailInput.value,
+          password: passwordInput.value,
+        },
+      );
+
+      localStorage.setItem("jwt", response.data.jwt);
+
+      router.push("/note");
+    } catch (error) {
+      alert(error);
+    }
+  }
 
   return (
     <main className="flex h-screen flex-col items-center justify-center">
@@ -58,7 +77,7 @@ export default function LoginPage() {
         </div>
         <button
           className="my-3 h-11 w-5/6 rounded-md bg-sky-600 text-white hover:bg-sky-700"
-          onClick={() => router.push("/note")}
+          onClick={login}
         >
           Logar
         </button>
