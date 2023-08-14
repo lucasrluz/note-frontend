@@ -22,7 +22,7 @@ export function NoteTitle() {
       setNotes(notes);
     };
 
-    notesData().catch((error) => alert(error));
+    notesData().catch((error) => console.log(error));
   }, []);
 
   function foo(e: any, element: any) {
@@ -30,9 +30,14 @@ export function NoteTitle() {
     const contentElement: HTMLInputElement =
       document.querySelector("#content")!;
 
+    console.log(element);
+
+    localStorage.setItem("noteEditor", element.noteId);
+
     titleElement.value = element.title;
     contentElement.value = element.content;
   }
+
   return (
     <div className="w-80 border-r border-stone-300">
       {notes.data &&
