@@ -39,6 +39,58 @@ export default function IndexPage() {
     setNoteOpen(note);
   }
 
+  function newNote() {
+    const textAreaTitle: HTMLTextAreaElement =
+      document.querySelector("#title")!;
+
+    const textAreaContent: HTMLTextAreaElement =
+      document.querySelector("#content")!;
+
+    textAreaTitle.value = "";
+    textAreaContent.value = "";
+
+    setNoteOpen(null);
+  }
+
+  async function saveNote(note: any) {
+    const textAreaTitle: HTMLTextAreaElement =
+      document.querySelector("#title")!;
+
+    const textAreaContent: HTMLTextAreaElement =
+      document.querySelector("#content")!;
+
+    if (noteOpen === null) {
+      const response = await axios.post(
+        "https://note-api-w041.onrender.com/note",
+        {
+          title: textAreaTitle.value,
+          content: textAreaContent.value,
+          userId: "",
+        },
+        {
+          headers: { JWT: localStorage.getItem("jwt") },
+        },
+      );
+
+      setNoteOpen(response.data);
+
+      return;
+    }
+
+    const response = await axios.put(
+      "https://note-api-w041.onrender.com/note",
+      {
+        noteId: note.noteId,
+        title: textAreaTitle.value,
+        content: textAreaContent.value,
+        userId: "",
+      },
+      {
+        headers: { JWT: localStorage.getItem("jwt") },
+      },
+    );
+  }
+
   return (
     <main className="flex h-screen flex-col">
       <div className="flex h-12 flex-row">
@@ -50,7 +102,10 @@ export default function IndexPage() {
           />
         </div>
         <div className="flex w-full flex-row items-center justify-end border-b border-stone-300">
-          <button className="mr-3 h-8 w-24 rounded bg-sky-500 text-white hover:bg-sky-400">
+          <button
+            onClick={newNote}
+            className="mr-3 h-8 w-24 rounded bg-sky-500 text-white hover:bg-sky-400"
+          >
             Criar Nota
           </button>
           <button
@@ -108,26 +163,6 @@ async function getNotes() {
   });
 
   return response;
-}
-
-async function saveNote(note: any) {
-  const textAreaTitle: HTMLTextAreaElement = document.querySelector("#title")!;
-
-  const textAreaContent: HTMLTextAreaElement =
-    document.querySelector("#content")!;
-
-  const response = await axios.put(
-    "https://note-api-w041.onrender.com/note",
-    {
-      noteId: note.noteId,
-      title: textAreaTitle.value,
-      content: textAreaContent.value,
-      userId: "",
-    },
-    {
-      headers: { JWT: localStorage.getItem("jwt") },
-    },
-  );
 }
 
 function setNoteInEditor(note: any) {
