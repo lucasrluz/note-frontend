@@ -2,13 +2,24 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { FilePlus, LogOut, Save, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function IndexPage() {
+  const router = useRouter();
   const [notes, setNotes]: any[] = useState(null);
   const [noteOpen, setNoteOpen]: any[] = useState(null);
   const [update, setUpdate]: any[] = useState(true);
 
   useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+
+    if (jwt === null) {
+      router.push("/login");
+
+      return;
+    }
+
     const response = async () => {
       const getNotesResponse = await getNotes();
 
@@ -25,6 +36,12 @@ export default function IndexPage() {
 
     setNoteInEditor(noteOpen);
   }, [noteOpen]);
+
+  function logout() {
+    localStorage.removeItem("jwt");
+
+    router.push("/login");
+  }
 
   function openNote(noteId: string) {
     let note;
@@ -102,23 +119,23 @@ export default function IndexPage() {
           />
         </div>
         <div className="flex w-full flex-row items-center justify-end border-b border-stone-300">
-          <button
-            onClick={newNote}
-            className="mr-3 h-8 w-24 rounded bg-sky-500 text-white hover:bg-sky-400"
-          >
-            Criar Nota
+          <button onClick={newNote} className="mr-5">
+            <FilePlus color="gray" />
           </button>
           <button
             onClick={async () => {
               await saveNote(noteOpen);
               setUpdate(!update);
             }}
-            className="mr-3 h-8 w-16 rounded bg-green-500 text-white hover:bg-green-400"
+            className="mr-5"
           >
-            Salvar
+            <Save color="gray" />
           </button>
-          <button className="mr-3 h-8 w-16 rounded bg-red-500 text-white hover:bg-red-400">
-            Excluir
+          <button className="mr-5">
+            <Trash2 color="gray" />
+          </button>
+          <button onClick={logout} className="mr-5">
+            <LogOut color="gray" />
           </button>
         </div>
       </div>
