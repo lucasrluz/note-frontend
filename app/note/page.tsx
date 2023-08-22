@@ -108,6 +108,28 @@ export default function IndexPage() {
     );
   }
 
+  async function deleteNote(note: any) {
+    const response = await axios.delete(
+      "https://note-api-w041.onrender.com/note/" + note.noteId,
+      {
+        headers: {
+          JWT: localStorage.getItem("jwt"),
+        },
+      },
+    );
+
+    const textAreaTitle: HTMLTextAreaElement =
+      document.querySelector("#title")!;
+
+    const textAreaContent: HTMLTextAreaElement =
+      document.querySelector("#content")!;
+
+    textAreaTitle.value = "";
+    textAreaContent.value = "";
+
+    setNoteOpen(null);
+  }
+
   return (
     <main className="flex h-screen flex-col">
       <div className="flex h-12 flex-row">
@@ -131,7 +153,13 @@ export default function IndexPage() {
           >
             <Save color="gray" />
           </button>
-          <button className="mr-5">
+          <button
+            onClick={async () => {
+              await deleteNote(noteOpen);
+              setUpdate(!update);
+            }}
+            className="mr-5"
+          >
             <Trash2 color="gray" />
           </button>
           <button onClick={logout} className="mr-5">
