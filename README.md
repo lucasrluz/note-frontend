@@ -8,8 +8,6 @@ Este projeto é construído usando **React, NextJS e Tailwind.**
 
 Ele foi desenvolvido para por em meu portifólio, mostrar os meus conhecimentos e consumir uma API que fiz.
 
-Este projeto está em produção, acesse em: https://note-frontend-6zd0.onrender.com
-
 Projeto Backend (API) com Spring Boot: https://github.com/lucasrluz/note
 
 ## Rodar Aplicação
